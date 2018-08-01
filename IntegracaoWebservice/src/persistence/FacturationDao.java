@@ -46,7 +46,7 @@ public class FacturationDao {
 			session = HibernateUtil.getSessionFactory().openSession();
 			query = session.createQuery("from Facturation as f where f.num_medidor= '" + Hidro + "'");
 			lista = query.list();
-			query.uniqueResult();
+			query.setMaxResults(1).uniqueResult();
 			
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -39,25 +39,29 @@ public class Controle extends HttpServlet {
 	private File file;
 
 	SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd");
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-		
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		String cmd = request.getParameter("cmd");
-		if(cmd.equalsIgnoreCase("exportar")) {
+
+		if (cmd.equalsIgnoreCase("exportar")) {
 			exportar(request, response);
+		} else if (cmd.equalsIgnoreCase("sair")) {
+			sair(request, response);
 		}
-		
+
 	}
-	
+
 	private void exportar(HttpServletRequest request, HttpServletResponse response) {
-		try { 
-		 String nome = file.getName();
-		 response.setContentType("text/html");
-		 response.setHeader("Content-Disposition", "attachment; filename='"+ nome + "'");
-		 OutputStream output = response.getOutputStream();
-		 Files.copy(file.toPath(), output);
-		}catch(Exception e){
-			
+		try {
+			String nome = file.getName();
+			response.setContentType("text/html");
+			response.setHeader("Content-Disposition", "attachment; filename='" + nome + "'");
+			OutputStream output = response.getOutputStream();
+			Files.copy(file.toPath(), output);
+		} catch (Exception e) {
+
 		}
 	}
 
@@ -139,25 +143,21 @@ public class Controle extends HttpServlet {
 				}
 
 			}
-			
-			
+
 			for (int i = 0; i < dd_atualizados.size(); i++) {
 
 				try {
 					List<Facturation> f = new FacturationDao().findFact(dd_atualizados.get(i).getMeasure());
 
-				
-					
-					SimpleDateFormat in= new SimpleDateFormat("yyyy-MM-dd");
+					SimpleDateFormat in = new SimpleDateFormat("yyyy-MM-dd");
 					SimpleDateFormat out = new SimpleDateFormat("yyyy-MM-dd");
-					 
+
 					String result = out.format(in.parse(f.get(i).getData_levant().toString()));
-					
-					
-					
+
 					dd_atualizados.get(i).setData_hist(result);
 					dd_atualizados.get(i).setIndice_antigo(f.get(i).getIndice());
-					dd_atualizados.get(i).setConsumo((double) (dd_atualizados.get(i).getMeasuring() - f.get(i).getIndice()));
+					dd_atualizados.get(i)
+							.setConsumo((double) (dd_atualizados.get(i).getMeasuring() - f.get(i).getIndice()));
 
 				} catch (HibernateException e) {
 					// TODO Auto-generated catch block
@@ -168,59 +168,44 @@ public class Controle extends HttpServlet {
 				}
 
 			}
-			
-			 ServletContext context = request.getServletContext();
-				path = context.getRealPath("/");
-				
-				System.out.println(path);
-				
-				file = new File(path + dados.get(0).getCode() + ".txt");
-				
-				FileWriter writer = new FileWriter(file);
-				
-				
-				writer.write(Parametros.cabecalho);
-				writer.write(System.getProperty("line.separator"));
-				
-				for(int i = 0; i < dd_atualizados.size() ;i++) {
-					
-					String dt = dd_atualizados.get(i).getDate().substring(0, 10);
-					System.out.println("data : " + dt);
-					
 
-					SimpleDateFormat in= new SimpleDateFormat("yyyy-MM-dd");
-					SimpleDateFormat out = new SimpleDateFormat("dd/MM/yyyy");
-					 
-					String result = out.format(in.parse(dt));
-					
-			
-					
-					
-					
-					
-					writer.write(dd_atualizados.get(i).getLocalizacao() + "\t" + 
-								 dd_atualizados.get(i).getMeasuring() + "\t" + 
-								 dd_atualizados.get(i).getIndice_antigo() + "\t" + 
-								 dd_atualizados.get(i).getConsumo() + "\t" + 
-								 dd_atualizados.get(i).getHaDesmontagem() + "\t" +
-								 dd_atualizados.get(i).getHaVazamento() + "\t" +
-								 dd_atualizados.get(i).getHouveVazamento() + "\t" + 
-								 dd_atualizados.get(i).getMedidorBloqueado() + "\t" +
-								 dd_atualizados.get(i).getCodigo() + "\t" +
-								 dd_atualizados.get(i).getMeasure() + "\t" +
-								 result + "\t" +
-								 dd_atualizados.get(i).getData_hist() + "\t" +
-								 8 + "\t" +
-								 0 + "\t" +
-								 dd_atualizados.get(i).getHouveDesmontagem() + "\t" + 
-								 dd_atualizados.get(i).getRetornoAgua());		
-					writer.write(System.getProperty("line.separator"));
-				
-				 }
-				 writer.close();
+			ServletContext context = request.getServletContext();
+			path = context.getRealPath("/");
+
+			System.out.println(path);
+
+			file = new File(path + dados.get(0).getCode() + ".txt");
+
+			FileWriter writer = new FileWriter(file);
+
+			writer.write(Parametros.cabecalho);
+			writer.write(System.getProperty("line.separator"));
+
+			for (int i = 0; i < dd_atualizados.size(); i++) {
+
+				String dt = dd_atualizados.get(i).getDate().substring(0, 10);
+				System.out.println("data : " + dt);
+
+				SimpleDateFormat in = new SimpleDateFormat("yyyy-MM-dd");
+				SimpleDateFormat out = new SimpleDateFormat("dd/MM/yyyy");
+
+				String result = out.format(in.parse(dt));
+
+				writer.write(dd_atualizados.get(i).getLocalizacao() + "\t" + dd_atualizados.get(i).getMeasuring() + "\t"
+						+ dd_atualizados.get(i).getIndice_antigo() + "\t" + dd_atualizados.get(i).getConsumo() + "\t"
+						+ dd_atualizados.get(i).getHaDesmontagem() + "\t" + dd_atualizados.get(i).getHaVazamento()
+						+ "\t" + dd_atualizados.get(i).getHouveVazamento() + "\t"
+						+ dd_atualizados.get(i).getMedidorBloqueado() + "\t" + dd_atualizados.get(i).getCodigo() + "\t"
+						+ dd_atualizados.get(i).getMeasure() + "\t" + result + "\t"
+						+ dd_atualizados.get(i).getData_hist() + "\t" + 8 + "\t" + 0 + "\t"
+						+ dd_atualizados.get(i).getHouveDesmontagem() + "\t" + dd_atualizados.get(i).getRetornoAgua());
+				writer.write(System.getProperty("line.separator"));
+
+			}
+			writer.close();
 
 			cadastra_fac(dd_atualizados);
-			
+
 			System.out.println(dd_atualizados);
 
 			request.setAttribute("dados", dd_atualizados);
@@ -228,16 +213,13 @@ public class Controle extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-	
 
 		request.getRequestDispatcher("medicao.jsp").forward(request, response);
 
 		return "";
 	}
 
-	private void cadastra_fac(List<Dados> dados)
-			throws ServletException, IOException {
+	private void cadastra_fac(List<Dados> dados) throws ServletException, IOException {
 
 		try {
 
@@ -245,16 +227,13 @@ public class Controle extends HttpServlet {
 
 				Clientes c = new Clientes();
 				c.setCodigo(dados.get(i).getCodigo());
-				
-				String Data2 =dados.get(i).getDate().substring(0, 10); 
-				
-				SimpleDateFormat in= new SimpleDateFormat("yyyy-MM-dd");
-				
-				
-				
-								
+
+				String Data2 = dados.get(i).getDate().substring(0, 10);
+
+				SimpleDateFormat in = new SimpleDateFormat("yyyy-MM-dd");
+
 				Date dt = in.parse(Data2);
-				
+
 				System.out.println(dt);
 				Date dt_hist = SDF.parse(dados.get(i).getData_hist());
 				Facturation f = new Facturation();
@@ -278,12 +257,21 @@ public class Controle extends HttpServlet {
 
 			}
 
-			
 		} catch (Exception ex) {
-			
+
 			ex.printStackTrace();
 
 		}
+
+	}
+
+	private void sair(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		file.delete();
+
+		request.getSession().invalidate();
+
+		request.getRequestDispatcher("inicio.jsp").forward(request, response);
 
 	}
 
