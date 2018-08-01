@@ -61,7 +61,7 @@ public class Controle extends HttpServlet {
 			OutputStream output = response.getOutputStream();
 			Files.copy(file.toPath(), output);
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 	}
 
@@ -74,7 +74,6 @@ public class Controle extends HttpServlet {
 			try {
 				logar(request, response);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -135,10 +134,10 @@ public class Controle extends HttpServlet {
 					dd_atualizados.get(i).setCodigo(h.get(i).getCliente().getCodigo());
 
 				} catch (HibernateException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 
@@ -160,10 +159,10 @@ public class Controle extends HttpServlet {
 							.setConsumo((double) (dd_atualizados.get(i).getMeasuring() - f.get(i).getIndice()));
 
 				} catch (HibernateException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 
@@ -210,7 +209,7 @@ public class Controle extends HttpServlet {
 
 			request.setAttribute("dados", dd_atualizados);
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 

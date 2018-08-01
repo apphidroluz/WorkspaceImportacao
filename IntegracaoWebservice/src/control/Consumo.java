@@ -34,7 +34,7 @@ public class Consumo {
 		try {
 			rt = new Resgata_Token().retorna_token(Login,Senha);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		

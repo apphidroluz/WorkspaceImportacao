@@ -50,8 +50,7 @@ public class HibernateUtil {
     
     public static void main(String[] args) {
    	 Configuration cfg = new
-   	 AnnotationConfiguration().configure("config/persistence.cfg.xml")
-   	 ;
+   	 AnnotationConfiguration().configure("config/persistence.cfg.xml");
    	
    	 new SchemaExport(cfg).create(true, true);
    	 }

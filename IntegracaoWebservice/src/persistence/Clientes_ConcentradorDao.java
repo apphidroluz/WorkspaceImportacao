@@ -49,7 +49,7 @@ public class Clientes_ConcentradorDao {
 			
 			System.out.println(cli);
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
 
